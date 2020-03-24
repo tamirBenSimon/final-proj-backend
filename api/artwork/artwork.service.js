@@ -17,9 +17,7 @@ async function query(filterBy = {}) {
     const collection = await dbService.getCollection('artwork')
     try {
         const artworks = await collection.find(criteria).toArray();
-        artworks.forEach(artwork => delete artwork.password);
-
-        return artworks
+        return artworks;
     } catch (err) {
         console.log('ERROR: cannot find artworks')
         throw err;
@@ -29,10 +27,10 @@ async function query(filterBy = {}) {
 async function getById(artworkId) {
     const collection = await dbService.getCollection('artwork')
     try {
-        const artwork = await collection.findOne({"_id":ObjectId(artworkId)})
+        const artwork = await collection.findOne({ "_id": ObjectId(artworkId) })
         delete artwork.password
 
-        artwork.givenReviews = await reviewService.query({byartworkId: ObjectId(artwork._id) })
+        artwork.givenReviews = await reviewService.query({ byartworkId: ObjectId(artwork._id) })
         artwork.givenReviews = artwork.givenReviews.map(review => {
             delete review.byartwork
             return review
@@ -48,7 +46,7 @@ async function getById(artworkId) {
 async function getByEmail(email) {
     const collection = await dbService.getCollection('artwork')
     try {
-        const artwork = await collection.findOne({email})
+        const artwork = await collection.findOne({ email })
         return artwork
     } catch (err) {
         console.log(`ERROR: while finding artwork ${email}`)
@@ -59,7 +57,7 @@ async function getByEmail(email) {
 async function remove(artworkId) {
     const collection = await dbService.getCollection('artwork')
     try {
-        await collection.deleteOne({"_id":ObjectId(artworkId)})
+        await collection.deleteOne({ "_id": ObjectId(artworkId) })
     } catch (err) {
         console.log(`ERROR: cannot remove artwork ${artworkId}`)
         throw err;
@@ -67,16 +65,18 @@ async function remove(artworkId) {
 }
 
 async function update(artwork) {
+
     const collection = await dbService.getCollection('artwork')
     artwork._id = ObjectId(artwork._id);
 
     try {
-        await collection.replaceOne({"_id":artwork._id}, {$set : artwork})
+        await collection.replaceOne({ "_id": artwork._id }, { $set: artwork })
         return artwork
     } catch (err) {
         console.log(`ERROR: cannot update artwork ${artwork._id}`)
         throw err;
     }
+
 }
 
 async function add(artwork) {
@@ -92,12 +92,16 @@ async function add(artwork) {
 
 function _buildCriteria(filterBy) {
     const criteria = {};
-    if (filterBy.txt) {
-        criteria.artworkname = filterBy.txt
+    if (filterBy.title) {
+        criteria.title =   {$regex:/<filterBy.title>/}
     }
-    if (filterBy.minBalance) {
-        criteria.balance = {$gte : +filterBy.minBalance}
+    if (filterBy.minPrice) {
+        criteria.minPrice = { $gte: +filterBy.minPrice }
     }
+    if (filterBy.maxPrice) {
+        criteria.maxPrice = { $lte: +filterBy.maxPrice }
+    }
+    console.log("building crtieria ",filterBy)
     return criteria;
 }
 
