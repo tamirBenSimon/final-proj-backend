@@ -16,7 +16,7 @@ async function query(filterBy = {}) {
     const criteria = _buildCriteria(filterBy)
     const collection = await dbService.getCollection('artwork')
     try {
-        const artworks = await collection.find(criteria).toArray();
+        const artworks = await collection.find(criteria).collation({locale:'en'}).toArray();
         return artworks;
     } catch (err) {
         console.log('ERROR: cannot find artworks')
@@ -93,7 +93,7 @@ async function add(artwork) {
 function _buildCriteria(filterBy) {
     const criteria = {};
     if (filterBy.title) {
-        criteria.title =   {$regex:/<filterBy.title>/}
+        criteria.title =  { $regex: filterBy.title, $options: '<m>' } 
     }
     if (filterBy.minPrice) {
         criteria.minPrice = { $gte: +filterBy.minPrice }
@@ -105,4 +105,5 @@ function _buildCriteria(filterBy) {
     return criteria;
 }
 
-
+// {$regex:/<filterBy.title>/}
+ 

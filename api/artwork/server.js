@@ -1,8 +1,8 @@
 {
     "title": "Good Morning MONGO DB",
-    "desc": "you want to buy this",
-    "price": 899,
-    "inStock": false,
+    "desc": "Made By mongoDB",
+    "price": 588888,
+    "inStock": true,
     "createdBy": {
         "fullName": "vlad indikt",
         "imgURL": "https://i.picsum.photos/id/552/200/250.jpg"
