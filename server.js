@@ -13,6 +13,7 @@ const authRoutes = require('./api/auth/auth.routes')
 const userRoutes = require('./api/user/user.routes')
 const reviewRoutes = require('./api/review/review.routes')
 const artworkRoutes = require('./api/artwork/artwork.routes')
+const wishlistRoutes = require('./api/wishlist/wishlist.routes')
 
 const connectSockets = require('./api/socket/socket.routes')
 
@@ -41,6 +42,7 @@ app.use('/api/auth', authRoutes)
 app.use('/api/user', userRoutes)
 app.use('/api/review', reviewRoutes)
 app.use('/api/artwork', artworkRoutes)
+app.use('/api/wishlist', wishlistRoutes)
 connectSockets(io)
 
 
