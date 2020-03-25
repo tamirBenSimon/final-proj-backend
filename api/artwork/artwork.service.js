@@ -17,6 +17,7 @@ async function query(filterBy = {}) {
     const collection = await dbService.getCollection('artwork')
     try {
         const artworks = await collection.find(criteria).collation({locale:'en'}).toArray();
+        // const artworks = await collection.find({"createdBy._id" : ObjectId("5e7a44432f43d212c3800da5")}).collation({locale:'en'}).toArray();
         return artworks;
     } catch (err) {
         console.log('ERROR: cannot find artworks')
@@ -91,6 +92,7 @@ async function add(artwork) {
 }
 
 function _buildCriteria(filterBy) {
+    console.log("the filterby: ",filterBy)
     const criteria = {};
     if (filterBy.title) {
         criteria.title =  { $regex: filterBy.title, $options: '<m>' } 
@@ -101,7 +103,10 @@ function _buildCriteria(filterBy) {
     if (filterBy.maxPrice) {
         criteria.maxPrice = { $lte: +filterBy.maxPrice }
     }
-    console.log("building crtieria ",filterBy)
+    if (filterBy.creatorId) {
+        criteria['createdBy._id'] =  ObjectId(filterBy.creatorId)
+    } 
+    console.log("the crtieria: ",criteria)
     return criteria;
 }
 
