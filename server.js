@@ -1,24 +1,23 @@
-const express = require('express')
-const bodyParser = require('body-parser')
-const cors = require('cors')
-const path = require('path')
-const cookieParser = require('cookie-parser')
-const session = require('express-session')
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
 
-const app = express()
+const app = express();
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 
-const authRoutes = require('./api/auth/auth.routes')
-const userRoutes = require('./api/user/user.routes')
-const reviewRoutes = require('./api/review/review.routes')
-const artworkRoutes = require('./api/artwork/artwork.routes')
-const wishlistRoutes = require('./api/wishlist/wishlist.routes')
+const authRoutes = require('./api/auth/auth.routes');
+const userRoutes = require('./api/user/user.routes');
+const reviewRoutes = require('./api/review/review.routes');
+const artworkRoutes = require('./api/artwork/artwork.routes');
+const wishlistRoutes = require('./api/wishlist/wishlist.routes');
+const orderRoutes = require('./api/order/order.routes');
+const connectSockets = require('./api/socket/socket.routes');
 
-const connectSockets = require('./api/socket/socket.routes')
-
-
-app.use(cookieParser())
+app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(session({
     secret: 'keyboard cat',
@@ -38,17 +37,18 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // routes
-app.use('/api/auth', authRoutes)
-app.use('/api/user', userRoutes)
-app.use('/api/review', reviewRoutes)
-app.use('/api/artwork', artworkRoutes)
-app.use('/api/wishlist', wishlistRoutes)
-connectSockets(io)
+app.use('/api/auth', authRoutes);
+app.use('/api/user', userRoutes);
+app.use('/api/review', reviewRoutes);
+app.use('/api/artwork', artworkRoutes);
+app.use('/api/wishlist', wishlistRoutes);
+app.use('/api/order', orderRoutes);
+connectSockets(io);
 
 
 
-const logger = require('./services/logger.service')
+const logger = require('./services/logger.service');
 const port = process.env.PORT || 3030;
 http.listen(port, () => {
-    logger.info('Server is running on port: ' + port)
+    logger.info('Server is running on port: ' + port);
 });
