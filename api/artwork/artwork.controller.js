@@ -4,7 +4,7 @@ async function getArtwork(req, res) {
     const artwork = await artworkService.getById(req.params.id)
     res.send(artwork)
 }
-  
+
 async function getArtworks(req, res) {
     console.log(req.query, 'inside artowork controller....');
     const artworks = await artworkService.query(req.query)

@@ -4,7 +4,7 @@ async function getOrder(req, res) {
     const order = await orderService.getById(req.params.id)
     res.send(order)
 }
-  
+
 async function getOrders(req, res) {
     const orders = await orderService.query(req.query)
     res.send(orders)

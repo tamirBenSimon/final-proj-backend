@@ -1,4 +1,3 @@
-
 const dbService = require('../../services/db.service')
 const reviewService = require('../review/review.service')
 const ObjectId = require('mongodb').ObjectId
@@ -16,7 +15,7 @@ async function query(filterBy = {}) {
     const criteria = _buildCriteria(filterBy)
     const collection = await dbService.getCollection('artwork')
     try {
-        const artworks = await collection.find(criteria).collation({locale:'en'}).toArray();
+        const artworks = await collection.find(criteria).collation({ locale: 'en' }).toArray();
         // const artworks = await collection.find({"createdBy._id" : ObjectId("5e7a44432f43d212c3800da5")}).collation({locale:'en'}).toArray();
         return artworks;
     } catch (err) {
@@ -93,10 +92,10 @@ async function add(artwork) {
 }
 
 function _buildCriteria(filterBy) {
-    console.log("the filterby: ",filterBy)
+    console.log("the filterby: ", filterBy)
     const criteria = {};
     if (filterBy.title) {
-        criteria.title =  { $regex: filterBy.title, $options: '<m>' } 
+        criteria.title = { $regex: filterBy.title, $options: '<m>' }
     }
     if (filterBy.minPrice) {
         criteria.minPrice = { $gte: +filterBy.minPrice }
@@ -105,11 +104,10 @@ function _buildCriteria(filterBy) {
         criteria.maxPrice = { $lte: +filterBy.maxPrice }
     }
     if (filterBy.creatorId) {
-        criteria['createdBy._id'] =  ObjectId(filterBy.creatorId)
-    } 
-    console.log("the crtieria: ",criteria)
+        criteria['createdBy._id'] = ObjectId(filterBy.creatorId)
+    }
+    console.log("the crtieria: ", criteria)
     return criteria;
 }
 
 // {$regex:/<filterBy.title>/}
- 
