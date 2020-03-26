@@ -9,6 +9,6 @@ const router = express.Router()
 router.get('/:id', getWishlist)
 router.put('/:id', addWishlist)
     // router.put('/:id',  requireAuth, updateUser)
-router.delete('/', deleteWishlist)
+router.delete('/:id', deleteWishlist)
 
 module.exports = router
