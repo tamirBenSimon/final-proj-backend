@@ -10,9 +10,11 @@ module.exports = {
 }
 
 async function query(userId) {
+    console.log('userId123: ', userId);
     const collection = await dbService.getCollection('user')
     try {
         const wishlist = await collection.find({ "_id": ObjectId(userId) }).toArray();
+        console.log('wishlist123: ', wishlist);
         return wishlist
     } catch (err) {
         console.log('ERROR: cannot find wishlist')
@@ -32,12 +34,10 @@ async function query(userId) {
 //             return review
 //         })
 
-
-
 async function remove(userId, productId) {
     const collection = await dbService.getCollection('user')
     try {
-        await collection.deleteOne({ "_id": ObjectId(userId) })
+        await collection.updateOne({ "_id": ObjectId(userId) }, { $pull: { "wishlist": { "_id": productId } } }, false, true)
     } catch (err) {
         console.log(`ERROR: cannot remove user ${userId}`)
         throw err;
