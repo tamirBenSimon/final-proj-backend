@@ -6,7 +6,7 @@ async function getArtwork(req, res) {
 }
 
 async function getArtworks(req, res) {
-    console.log(req.query, 'inside artowork controller....');
+    // console.log(req.query, 'inside artowork controller....');
     const artworks = await artworkService.query(req.query)
     res.send(artworks)
 }

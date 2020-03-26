@@ -3,7 +3,7 @@ const dbService = require('../../services/db.service')
 const ObjectId = require('mongodb').ObjectId
 
 async function query(filterBy = {}) {
-    console.log('inside service...');
+    // console.log('inside service...');
     // const criteria = _buildCriteria(filterBy)
     const collection = await dbService.getCollection('review')
     try {

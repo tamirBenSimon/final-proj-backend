@@ -12,12 +12,7 @@ async function getWishlist(req, res) {
 }
 
 async function deleteWishlist(req, res) {
-    // const userId, 
-    const productId = req.query;
-    // const productId = req.params.id;
-    // const productId = req.body;
-    // console.log('userId555 ', userId);
-    console.log('productId555 ', productId);
+    const { productId, userId } = req.body;
     await wishlistService.remove(userId, productId)
     res.end()
 }
