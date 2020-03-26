@@ -14,6 +14,7 @@ module.exports = {
 
 async function query(filterBy = {}) {
     const criteria = _buildCriteria(filterBy)
+    console.log('inside service....')
     const collection = await dbService.getCollection('artwork')
     try {
         const artworks = await collection.find(criteria).collation({ locale: 'en' }).toArray();
