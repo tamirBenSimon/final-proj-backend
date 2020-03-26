@@ -10,6 +10,7 @@ module.exports = {
 }
 
 async function query(filterBy = {}) {
+    console.log('inside orderService query. filterBy is:',filterBy)
     const criteria = _buildCriteria(filterBy)
     const collection = await dbService.getCollection('order')
     try {
@@ -67,6 +68,11 @@ async function update(order) {
 
 async function add(order) {
     const collection = await dbService.getCollection('order')
+    
+    order.by._id = ObjectId(order.by._id);
+    order.from._id = ObjectId(order.from._id);
+    order.product._id = ObjectId(order.product._id);
+    console.log('inside add: ',order);
     try {
         await collection.insertOne(order);
         return order;
@@ -77,7 +83,6 @@ async function add(order) {
 }
 
 function _buildCriteria(filterBy) {
-    console.log("the filterby: ", filterBy)
     const criteria = {};
     if (filterBy.title) {
         criteria.title = { $regex: filterBy.title, $options: '<m>' }
@@ -88,10 +93,12 @@ function _buildCriteria(filterBy) {
     if (filterBy.maxPrice) {
         criteria.maxPrice = { $lte: +filterBy.maxPrice }
     }
-    if (filterBy.creatorId) {
+    if (filterBy.sellerId) {
+        console.log("the filterby: ", filterBy.sellerId)
         criteria['from._id'] = ObjectId(filterBy.sellerId)
+        // criteria['from._id'] = filterBy.sellerId
     }
-    console.log("the crtieria: ", criteria)
+    console.log("the current crtieria: ", criteria)
     return criteria;
 }
 

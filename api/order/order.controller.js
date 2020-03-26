@@ -7,6 +7,7 @@ async function getOrder(req, res) {
 
 async function getOrders(req, res) {
     const orders = await orderService.query(req.query)
+    console.log('req.query inside order controller:', req.query)
     res.send(orders)
 }
 
