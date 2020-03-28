@@ -11,23 +11,23 @@ function getTime() {
     return now.toUTCString();
 }
 
-function doLog(line, level='Debug') {
-    line = `${getTime()} - ${level} - ${line}\n` 
+function doLog(line, level = 'Debug') {
+    line = `${getTime()} - ${level} - ${line}\n`
     console.log(line);
-    fs.appendFileSync('./logs/backend.log',line);
+    fs.appendFileSync('./logs/backend.log', line);
 }
 
 module.exports = {
-    debug(line){
+    debug(line) {
         doLog(line, "Debug")
     },
-    info(line){
+    info(line) {
         doLog(line, "Info")
     },
-    warn(line){
+    warn(line) {
         doLog(line, "Warn")
     },
-    error(line){
+    error(line) {
         doLog(line, "Error")
     }
 }

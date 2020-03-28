@@ -1,4 +1,3 @@
-
 const dbService = require('../../services/db.service')
 const reviewService = require('../review/review.service')
 const ObjectId = require('mongodb').ObjectId
@@ -14,14 +13,7 @@ module.exports = {
 
 async function query(filterBy = {}) {
     const criteria = _buildCriteria(filterBy)
-
-
-
-    console.log("finished criteria building ",criteria)
-
- 
     const collection = await dbService.getCollection('artwork')
-
     if (filterBy.limit) {
         try {
             const artworks = await collection.find(criteria).limit(+filterBy.limit).collation({ locale: 'en' }).toArray();
@@ -30,10 +22,7 @@ async function query(filterBy = {}) {
             console.log('ERROR: cannot find artworks')
             throw err;
         }
-
-    }
-
-    else {
+    } else {
         try {
             const artworks = await collection.find(criteria).collation({ locale: 'en' }).toArray();
             console.log(" got artworks for artist -- ", artworks)
@@ -50,20 +39,19 @@ async function getById(artworkId) {
     try {
         const artwork = await collection.findOne({ "_id": ObjectId(artworkId) })
         delete artwork.password
-
         artwork.givenReviews = await reviewService.query({ byartworkId: ObjectId(artwork._id) })
         artwork.givenReviews = artwork.givenReviews.map(review => {
             delete review.byartwork
             return review
         })
-
-
         return artwork
+
     } catch (err) {
         console.log(`ERROR: while finding artwork ${artworkId}`)
         throw err;
     }
 }
+
 async function getByEmail(email) {
     const collection = await dbService.getCollection('artwork')
     try {
@@ -86,11 +74,8 @@ async function remove(artworkId) {
 }
 
 async function update(artwork) {
-
     const collection = await dbService.getCollection('artwork')
     artwork._id = ObjectId(artwork._id);
-    // ?????????
-
     try {
         await collection.replaceOne({ "_id": artwork._id }, { $set: artwork })
         return artwork
@@ -98,7 +83,6 @@ async function update(artwork) {
         console.log(`ERROR: cannot update artwork ${artwork._id}`)
         throw err;
     }
-
 }
 
 async function add(artwork) {
@@ -128,24 +112,21 @@ function _buildCriteria(filterBy) {
     }
     if (filterBy.tag) {
         criteria.tags = { $in: [filterBy.tag] }
-        // ({ tags: { $in: ["psychedelic"] } })
+            // ({ tags: { $in: ["psychedelic"] } })
     }
     if (filterBy.colorTags) {
         console.log('in colorTags filtering')
         criteria.colorTags = { $in: [filterBy.colorTags] }
-        // ({ tags: { $in: ["psychedelic"] } })
+            // ({ tags: { $in: ["psychedelic"] } })
     }
     if (filterBy.limit) {
         console.log('inside BACK artworkService ,  ', filterBy.limit)
     }
     if (filterBy.artType) {
         criteria.artType = filterBy.artType
-        // { $regex: filterBy.title, $options: '<m>' }
+            // { $regex: filterBy.title, $options: '<m>' }
         console.log("the current crtieria:  artType", criteria.artType)
     }
-
-
     return criteria;
 }
-
 // {$regex:/<filterBy.title>/}

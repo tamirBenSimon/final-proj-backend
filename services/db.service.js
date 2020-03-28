@@ -1,7 +1,7 @@
 const MongoClient = require('mongodb').MongoClient;
 
 const config = require('../config') // Can be shortend to '../config';
-// When requiring just the folder, it will automatically look for index file
+    // When requiring just the folder, it will automatically look for index file
 
 module.exports = {
     getCollection
@@ -19,11 +19,10 @@ async function getCollection(collectionName) {
 
 async function connect() {
     if (dbConn) {
-        
+
         return dbConn;
     }
     try {
-        console.log('connecting to atlas ' ,  config.dbURL) 
         const client = await MongoClient.connect(config.dbURL, { useUnifiedTopology: true });
         const db = client.db(dbName);
         dbConn = db;
@@ -33,7 +32,3 @@ async function connect() {
         throw err;
     }
 }
-
-
-
-

@@ -1,10 +1,5 @@
 const wishlistService = require('./wishlist.service')
 
-// async function getUser(req, res) {
-//     const user = await wishlistService.getById(req.params.id)
-//     res.send(user)
-// }
-
 async function getWishlist(req, res) {
     const userId = req.params.id;
     const wishlist = await wishlistService.query(userId)
@@ -28,5 +23,4 @@ module.exports = {
     getWishlist,
     addWishlist,
     deleteWishlist,
-    // getUsers
 }

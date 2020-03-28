@@ -10,7 +10,6 @@ module.exports = {
 }
 
 async function query(filterBy = {}) {
-    console.log('inside orderService query. filterBy is:',filterBy)
     const criteria = _buildCriteria(filterBy)
     const collection = await dbService.getCollection('order')
     try {
@@ -52,10 +51,8 @@ async function remove(orderId) {
 }
 
 async function update(order) {
-
     const collection = await dbService.getCollection('order')
     order._id = ObjectId(order._id);
-
     try {
         await collection.replaceOne({ "_id": order._id }, { $set: order })
         return order
@@ -63,16 +60,14 @@ async function update(order) {
         console.log(`ERROR: cannot update order ${order._id}`)
         throw err;
     }
-
 }
 
 async function add(order) {
     const collection = await dbService.getCollection('order')
-    
     order.by._id = ObjectId(order.by._id);
     order.from._id = ObjectId(order.from._id);
     order.product._id = ObjectId(order.product._id);
-    console.log('inside add: ',order);
+    console.log('inside add: ', order);
     try {
         await collection.insertOne(order);
         return order;
@@ -96,10 +91,8 @@ function _buildCriteria(filterBy) {
     if (filterBy.sellerId) {
         console.log("the filterby: ", filterBy.sellerId)
         criteria['from._id'] = ObjectId(filterBy.sellerId)
-        // criteria['from._id'] = filterBy.sellerId
+            // criteria['from._id'] = filterBy.sellerId
     }
-
     return criteria;
 }
-
 // {$regex:/<filterBy.title>/}
