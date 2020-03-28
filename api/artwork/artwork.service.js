@@ -19,16 +19,13 @@ async function query(filterBy = {}) {
             const artworks = await collection.find(criteria).limit(+filterBy.limit).collation({ locale: 'en' }).toArray();
             return artworks;
         } catch (err) {
-            console.log('ERROR: cannot find artworks')
             throw err;
         }
     } else {
         try {
             const artworks = await collection.find(criteria).collation({ locale: 'en' }).toArray();
-            console.log(" got artworks for artist -- ", artworks)
             return artworks;
         } catch (err) {
-            console.log('ERROR: cannot find artworks')
             throw err;
         }
     }
@@ -68,7 +65,6 @@ async function remove(artworkId) {
     try {
         await collection.deleteOne({ "_id": ObjectId(artworkId) })
     } catch (err) {
-        console.log(`ERROR: cannot remove artwork ${artworkId}`)
         throw err;
     }
 }
@@ -80,7 +76,6 @@ async function update(artwork) {
         await collection.replaceOne({ "_id": artwork._id }, { $set: artwork })
         return artwork
     } catch (err) {
-        console.log(`ERROR: cannot update artwork ${artwork._id}`)
         throw err;
     }
 }
@@ -91,7 +86,6 @@ async function add(artwork) {
         await collection.insertOne(artwork);
         return artwork;
     } catch (err) {
-        console.log(`ERROR: cannot insert artwork`)
         throw err;
     }
 }
@@ -112,21 +106,18 @@ function _buildCriteria(filterBy) {
     }
     if (filterBy.tag) {
         criteria.tags = { $in: [filterBy.tag] }
-            // ({ tags: { $in: ["psychedelic"] } })
     }
     if (filterBy.colorTags) {
-        console.log('in colorTags filtering')
         criteria.colorTags = { $in: [filterBy.colorTags] }
-            // ({ tags: { $in: ["psychedelic"] } })
     }
     if (filterBy.limit) {
-        console.log('inside BACK artworkService ,  ', filterBy.limit)
     }
     if (filterBy.artType) {
         criteria.artType = filterBy.artType
-            // { $regex: filterBy.title, $options: '<m>' }
-        console.log("the current crtieria:  artType", criteria.artType)
     }
+    if (filterBy.artGenre) {
+        criteria.artGenre = filterBy.artGenre
+    }
+
     return criteria;
 }
-// {$regex:/<filterBy.title>/}
