@@ -14,14 +14,34 @@ module.exports = {
 
 async function query(filterBy = {}) {
     const criteria = _buildCriteria(filterBy)
-    console.log('inside service....')
+
+
+
+    console.log("finished criteria building ",criteria)
+
+ 
     const collection = await dbService.getCollection('artwork')
-    try {
-        const artworks = await collection.find(criteria).collation({ locale: 'en' }).toArray();
-        return artworks;
-    } catch (err) {
-        console.log('ERROR: cannot find artworks')
-        throw err;
+
+    if (filterBy.limit) {
+        try {
+            const artworks = await collection.find(criteria).limit(+filterBy.limit).collation({ locale: 'en' }).toArray();
+            return artworks;
+        } catch (err) {
+            console.log('ERROR: cannot find artworks')
+            throw err;
+        }
+
+    }
+
+    else {
+        try {
+            const artworks = await collection.find(criteria).collation({ locale: 'en' }).toArray();
+            console.log(" got artworks for artist -- ", artworks)
+            return artworks;
+        } catch (err) {
+            console.log('ERROR: cannot find artworks')
+            throw err;
+        }
     }
 }
 
@@ -93,7 +113,6 @@ async function add(artwork) {
 }
 
 function _buildCriteria(filterBy) {
-    console.log('in criteria bulding tags ,  ', filterBy )
     const criteria = {};
     if (filterBy.title) {
         criteria.title = { $regex: filterBy.title, $options: '<m>' }
@@ -105,7 +124,7 @@ function _buildCriteria(filterBy) {
         criteria.maxPrice = { $lte: +filterBy.maxPrice }
     }
     if (filterBy.creatorId) {
-        criteria['createdBy._id'] = ObjectId(filterBy.sellerId)
+        criteria['createdBy._id'] = ObjectId(filterBy.creatorId)
     }
     if (filterBy.tag) {
         criteria.tags = { $in: [filterBy.tag] }
@@ -116,6 +135,16 @@ function _buildCriteria(filterBy) {
         criteria.colorTags = { $in: [filterBy.colorTags] }
         // ({ tags: { $in: ["psychedelic"] } })
     }
+    if (filterBy.limit) {
+        console.log('inside BACK artworkService ,  ', filterBy.limit)
+    }
+    if (filterBy.artType) {
+        criteria.artType = filterBy.artType
+        // { $regex: filterBy.title, $options: '<m>' }
+        console.log("the current crtieria:  artType", criteria.artType)
+    }
+
+
     return criteria;
 }
 

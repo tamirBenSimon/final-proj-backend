@@ -98,7 +98,7 @@ function _buildCriteria(filterBy) {
         criteria['from._id'] = ObjectId(filterBy.sellerId)
         // criteria['from._id'] = filterBy.sellerId
     }
-    console.log("the current crtieria: ", criteria)
+
     return criteria;
 }
 
