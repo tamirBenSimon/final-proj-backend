@@ -56,6 +56,7 @@ async function getByEmail(userName) {
 }
 
 async function remove(userId) {
+    console.log('userId in back!!! ', userId);
     const collection = await dbService.getCollection('user')
     try {
         await collection.deleteOne({ "_id": ObjectId(userId) })
