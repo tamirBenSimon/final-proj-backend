@@ -7,12 +7,10 @@ async function getOrder(req, res) {
 
 async function getOrders(req, res) {
     const orders = await orderService.query(req.query)
-    console.log('req.query inside order controller:', req.query)
     res.send(orders)
 }
 
 async function deleteOrder(req, res) {
-    console.log('DELETE ', req.body)
     await orderService.remove(req.params.id)
     res.end()
 }

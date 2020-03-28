@@ -6,15 +6,11 @@ async function getArtwork(req, res) {
 }
 
 async function getArtworks(req, res) {
-    // console.log(req.query, 'inside artowork controller....');
     const artworks = await artworkService.query(req.query)
-    console.log('sending artworks length: ',artworks.length);
-    console.log('sending artworks: ',artworks);
     res.send(artworks)
 }
 
 async function deleteArtwork(req, res) {
-    console.log('DELETE ', req.body)
     await artworkService.remove(req.params.id)
     res.end()
 }
