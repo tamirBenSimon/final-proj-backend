@@ -1,4 +1,3 @@
-
 const dbService = require('../../services/db.service')
 const ObjectId = require('mongodb').ObjectId
 
@@ -8,39 +7,36 @@ async function query(filterBy = {}) {
     const collection = await dbService.getCollection('review')
     try {
         // const reviews = await collection.find(criteria).toArray();
-        var reviews = await collection.aggregate([
-            {
+        var reviews = await collection.aggregate([{
                 $match: filterBy
             },
             {
-                $lookup:
-                {
+                $lookup: {
                     from: 'user',
                     localField: 'byUserId',
                     foreignField: '_id',
                     as: 'byUser'
                 }
-            }, 
+            },
             {
                 $unwind: '$byUser'
             },
             {
-                $lookup:
-                {
+                $lookup: {
                     from: 'user',
                     localField: 'aboutUserId',
                     foreignField: '_id',
                     as: 'aboutUser'
                 }
-            }, 
+            },
             {
                 $unwind: '$aboutUser'
             }
         ]).toArray()
 
         reviews = reviews.map(review => {
-            review.byUser = {_id: review.byUser._id, username: review.byUser.username}
-            review.aboutUser = {_id: review.aboutUser._id, username: review.aboutUser.username}
+            review.byUser = { _id: review.byUser._id, userName: review.byUser.userName }
+            review.aboutUser = { _id: review.aboutUser._id, userName: review.aboutUser.userName }
             delete review.byUserId;
             delete review.aboutUserId;
             return review;
@@ -56,7 +52,7 @@ async function query(filterBy = {}) {
 async function remove(reviewId) {
     const collection = await dbService.getCollection('review')
     try {
-        await collection.deleteOne({"_id":ObjectId(reviewId)})
+        await collection.deleteOne({ "_id": ObjectId(reviewId) })
     } catch (err) {
         console.log(`ERROR: cannot remove review ${reviewId}`)
         throw err;
@@ -88,5 +84,3 @@ module.exports = {
     remove,
     add
 }
-
-

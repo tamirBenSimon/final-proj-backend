@@ -44,13 +44,13 @@ async function getById(userId) {
         throw err;
     }
 }
-async function getByEmail(username) {
+async function getByEmail(userName) {
     const collection = await dbService.getCollection('user')
     try {
-        const user = await collection.findOne({ username })
+        const user = await collection.findOne({ userName })
         return user
     } catch (err) {
-        console.log(`ERROR: while finding user ${username}`)
+        console.log(`ERROR: while finding user ${userName}`)
         throw err;
     }
 }
@@ -92,7 +92,7 @@ async function add(user) {
 function _buildCriteria(filterBy) {
     const criteria = {};
     if (filterBy.txt) {
-        criteria.username = filterBy.txt
+        criteria.userName = filterBy.txt
     }
     if (filterBy.minBalance) {
         criteria.balance = { $gte: +filterBy.minBalance }
