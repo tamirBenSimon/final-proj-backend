@@ -93,7 +93,6 @@ async function add(artwork) {
 }
 
 function _buildCriteria(filterBy) {
-    console.log('in criteria bulding tags ,  ', filterBy )
     const criteria = {};
     if (filterBy.title) {
         criteria.title = { $regex: filterBy.title, $options: '<m>' }
@@ -105,6 +104,7 @@ function _buildCriteria(filterBy) {
         criteria.maxPrice = { $lte: +filterBy.maxPrice }
     }
     if (filterBy.creatorId) {
+        console.log('inside creatorId if:',filterBy.creatorId)
         criteria['createdBy._id'] = ObjectId(filterBy.sellerId)
     }
     if (filterBy.tag) {
