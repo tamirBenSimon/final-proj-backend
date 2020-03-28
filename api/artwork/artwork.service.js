@@ -141,8 +141,13 @@ function _buildCriteria(filterBy) {
     if (filterBy.artType) {
         criteria.artType = filterBy.artType
         // { $regex: filterBy.title, $options: '<m>' }
-        console.log("the current crtieria:  artType", criteria.artType)
     }
+    if (filterBy.artGenre) {
+        criteria.artGenre = filterBy.artGenre
+        // { $regex: filterBy.title, $options: '<m>' }
+        console.log("the current crtieria:  artGenre", criteria.artGenre)
+    }
+
 
 
     return criteria;
