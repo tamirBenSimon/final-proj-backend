@@ -11,6 +11,7 @@ async function getUsers(req, res) {
 }
 
 async function deleteUser(req, res) {
+    console.log('in controller!!!');
     await userService.remove(req.params.id)
     res.end()
 }
