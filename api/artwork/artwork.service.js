@@ -32,6 +32,7 @@ async function query(filterBy = {}) {
 }
 
 async function getById(artworkId) {
+    console.log("in getByID !!!!", artworkId)
     const collection = await dbService.getCollection('artwork')
     try {
         const artwork = await collection.findOne({ "_id": ObjectId(artworkId) })
@@ -81,6 +82,7 @@ async function update(artwork) {
 }
 
 async function add(artwork) {
+    console.log(" in artwork service !!! artwork added -" , artwork)
     const collection = await dbService.getCollection('artwork')
     try {
         await collection.insertOne(artwork);
@@ -96,10 +98,10 @@ function _buildCriteria(filterBy) {
         criteria.title = { $regex: filterBy.title, $options: '<m>' }
     }
     if (filterBy.minPrice) {
-        criteria.minPrice = { $gte: +filterBy.minPrice }
+        criteria.price = { $gte: +filterBy.minPrice }
     }
     if (filterBy.maxPrice) {
-        criteria.maxPrice = { $lte: +filterBy.maxPrice }
+        criteria.price = { $lt: +filterBy.maxPrice }
     }
     if (filterBy.creatorId) {
         criteria['createdBy._id'] = ObjectId(filterBy.creatorId)
@@ -108,8 +110,10 @@ function _buildCriteria(filterBy) {
         criteria.tags = { $in: [filterBy.tag] }
     }
     if (filterBy.colorTags) {
+        console.log("building for colorTags !  ", filterBy.colorTags)
         criteria.colorTags = { $in: [filterBy.colorTags] }
     }
+
     if (filterBy.limit) {
     }
     if (filterBy.artType) {
@@ -118,6 +122,10 @@ function _buildCriteria(filterBy) {
     if (filterBy.artGenre) {
         criteria.artGenre = filterBy.artGenre
     }
+    if (filterBy.creatorName) {
+        criteria['createdBy.fullName'] = { $regex: filterBy.creatorName, $options: '<m>' }
+    }
+
 
     return criteria;
 }

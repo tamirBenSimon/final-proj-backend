@@ -22,8 +22,8 @@ async function updateArtwork(req, res) {
 }
 async function addArtwork(req, res) {
     const artwork = req.body;
-    await artworkService.add(artwork)
-    res.send(artwork)
+    const resArtwork= await artworkService.add(artwork)
+    res.send(resArtwork)
 }
 
 module.exports = {
