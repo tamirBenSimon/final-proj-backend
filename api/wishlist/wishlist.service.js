@@ -11,7 +11,6 @@ async function query(userId) {
     const collection = await dbService.getCollection('user')
     try {
         const wishlist = await collection.find({ "_id": ObjectId(userId) }).toArray();
-        console.log('inside wishlist query. the wishlist: ', wishlist);
         return wishlist
     } catch (err) {
         console.log('ERROR: cannot find wishlist')
