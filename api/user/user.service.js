@@ -12,21 +12,21 @@ module.exports = {
 }
 
 async function query(filterBy = {}) {
-    const criteria = _buildCriteria(filterBy)
-    const collection = await dbService.getCollection('user')
+    const criteria = _buildCriteria(filterBy);
+    const collection = await dbService.getCollection('user');
     try {
         const users = await collection.find(criteria).toArray();
         users.forEach(user => delete user.password);
 
-        return users
+        return users;
     } catch (err) {
-        console.log('ERROR: cannot find users')
+        console.log('ERROR: cannot find users');
         throw err;
     }
 }
 
 async function getById(userId) {
-    const collection = await dbService.getCollection('user')
+    const collection = await dbService.getCollection('user');
     try {
         const user = await collection.findOne({ "_id": ObjectId(userId) })
         delete user.password
